@@ -4,7 +4,6 @@ defmodule Pipe do
     quote do
       require Pipe
       import Pipe
-    
     end
   end
   
@@ -16,40 +15,54 @@ defmodule Pipe do
   
   defmacro pipe_matching(expr, pipes) do
     quote do
-      pipe_if(&(match? unquote(expr), &1), unquote pipes)
+      pipe_while(&(match? unquote(expr), &1), unquote pipes)
     end
   end
 
-  defmacro pipe_if(test, pipes) do
-    Enum.reduce Macro.unpipe(pipes), fn x, acc ->
-      left_side = quote do: ac
-      quote do
-        ac = unquote acc
-        case unquote(test).(ac) do
-          true -> unquote(Macro.pipe(left_side, x))
-          false -> ac
-        end
+  #     pipe_while &(valid? &1), 
+  #     json_doc |> transform |> transform
+
+  defmacro pipe_while(test, pipes) do
+    Enum.reduce Macro.unpipe(pipes), &(reduce_if &1, &2, test)
+  end
+  
+  defp reduce_if( x, acc, test ) do
+    left_side = quote do: ac
+    
+    quote do
+      ac = unquote acc
+      case unquote(test).(ac) do
+        true -> unquote(Macro.pipe(left_side, x))
+        false -> ac
       end
     end
   end
+  
+  
+  # a custom merge function that takes the piped function and an argument, 
+  # and returns the accumulated value
+  # pipe_with fn(f, acc) -> Enum.map(acc, f) end,
+  #   [ 1, 2, 3] |> &(&1 + 1) |> &(&1 * 2)
+  
+  defmacro pipe_with(fun, pipes) do
+    Enum.reduce Macro.unpipe(pipes), &(reduce_with &1, &2, fun)
+  end
 
-  # pipe :matching, {:ok, _}, 
-  #        ensure_protocol(protocol)
-  #     |> change_debug_info(types)
-  #     |> compile
-  defmacro pipe(form, arg, pipes) do
-    case form do
-      :matching -> pipe_matching(arg, pipes)
-      :if -> pipe_if(arg, pipes)
-      other -> raise "Unsupported pipe form: #{form}"
+  defp reduce_with( segment, acc, fun ) do
+    left_side = quote do: acc
+    x = quote do: x
+    quote do
+      inner = fn(x) ->
+        unquote Macro.pipe(x, segment)
+      end
+
+      unquote(fun).(inner, unquote(acc))
     end
   end
-    
-
-  defmacro show_pipes(pipes) do
-    IO.puts inspect(Macro.unpipe(pipes))
-  end
-
   
+  
+  defp pipe_with([], acc, _fun, _var) do
+    acc
+  end
   
 end
