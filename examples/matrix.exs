@@ -1,0 +1,23 @@
+defmodule Matrix do
+  @moduledoc """
+  pipe_with
+  
+  Basic matrix math. 
+  
+  matrix + 1 should add 1 to all cells of the matrix
+  
+  mix run lib/examples/matrix.exs
+  """
+  # usage: 
+  # matrix = [[1, 2], [2, 3], [0, 1]]
+  # pipe_with &Matrix.merge_lists/2, matrix |> Kernel.+(1) |> Kernel.*(2)  
+  # -> [[4, 6], [6, 8], [2, 4]]
+  def merge_list(f, x), do: Enum.map(x, f)
+  def merge_lists(f, x), do: Enum.map(x, &merge_list(f, &1))
+
+end
+
+use Pipe
+IO.inspect( 
+pipe_with &Matrix.merge_lists/2, 
+  [[1, 2], [2, 3]] |> Kernel.*(2) |> Kernel.+(1) )

@@ -1,8 +1,13 @@
 
 defmodule Pipe do
+  @moduledoc """
+  def inc(x), do: x + 1
+  def double(x), do: x * 2
+  
+  1 |> inc |> double
+  """
   defmacro __using__(_) do
     quote do
-      require Pipe
       import Pipe
     end
   end
