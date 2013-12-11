@@ -15,4 +15,6 @@ Some of the [best](http://joearms.github.io/2013/05/31/a-week-with-elixir.html) 
 
 The return value of each function is used as the first argument of the next function in the pipe. It's a beautiful expression that makes the intent of the programmer clear. 
 
-## Problems
+## Trouble in the Kitchen
+
+Sometimes, you need to compose functions with a different strategy. Say your functions use Erlang-style APIs. You might have functions that return """{:ok, value}""" or {:error, value}. 
