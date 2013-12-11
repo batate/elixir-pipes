@@ -38,8 +38,7 @@ use Pipe
 ...
 ```
 
-Then, you'll specify one of the three compositions. 
-
+That's it. After that, you can continue to use unadorned pipes, or use one of the prepackaged compositions. Initially, we have three:
 
 ### pipe_matching
 
