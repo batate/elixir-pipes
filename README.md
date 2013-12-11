@@ -15,6 +15,96 @@ Some of the [best](http://joearms.github.io/2013/05/31/a-week-with-elixir.html) 
 
 The return value of each function is used as the first argument of the next function in the pipe. It's a beautiful expression that makes the intent of the programmer clear. 
 
-## Trouble in the Kitchen
+### Trouble in the Kitchen
 
-Sometimes, you need to compose functions with a different strategy. Say your functions use Erlang-style APIs. You might have functions that return `{:ok, value}` or `{:error, value}`. 
+Sometimes, you need to compose functions with a different strategy. Say your functions use Erlang-style APIs. You might have functions that return `{:ok, value}` or `{:error, value}`. Then, the pipe operator might make things difficult. After you receive an `error` code, you probably want the pipe to stop. 
+
+## Getting Started
+
+All you need to do to get started is to add the project to your mix file as a dependency. Then, when you want to use the macros, you'll simply use it:
+
+```Elixir
+use Pipe
+
+...
+```
+
+Then, you'll specify one of the three compositions. 
+
+
+### pipe_matching
+
+This function will compose as long as the computed value matches the value so far. For example, consider this Russian Roulette application:
+
+```elixir
+defmodule RussianRoulette do
+  def click(acc) do
+    IO.puts "click..."
+    {:ok, "click"}
+  end
+
+  def bang(acc) do
+    IO.puts "BANG."
+    {:error, "bang"}
+  end
+end
+
+pipe_matching {:ok, _},  
+{:ok, ""} |> click |> click |> bang |> click
+
+```
+
+...would produce...
+
+```
+click...
+click...
+BANG.
+```
+
+It would evaluate functions as long as the accumulator matched the expression. In this case, we process statements as long as the composition yields an `:ok` on the left hand side. 
+
+
+### pipe_while
+
+Sometimes, you may want to test on something other than a match. This composition strategy will continue as long as your composition satisfies the test function you provide. To implement the above, you could do this just as well:
+
+```elixir
+    def while_test({:ok, _}), do: true
+    def while_test(_), do: false
+    def inc({code, x}), do: {code, x + 1}
+    def double({code, x}), do: {code, x * 2}
+
+    pipe_while(&while_test/1, {:ok, ""} |> click |> click |> bang |> click )
+```
+
+You could also write tests for testing a value, such as whether a value is even, whether a record is valid, or whether a user is authorized. 
+
+### pipe_with
+
+Sometimes, you want to write the composition rules yourself. You can do this with `pipe_with function, pipe` where function has a sig of f(pipe_segment, x). The macro will pass a function that wraps each pipe segment to your function. You can also pass it some argument, which is usually a transformation of a function. 
+
+Say you have a list, and you want to do arithmetic on each element of the list. You can do so with `pipe_with` like this:
+
+```elixir
+  def inc(x), do: x + 1
+  def double(x), do: x * 2
+
+  pipe_with fn(f, acc) -> Enum.map(acc, f) end,
+        [ 1, 2, 3] |> inc |> double
+
+```
+This returns 
+
+```
+[(1 + 1) * 2, (2 + 1) * 2, (2 + 2) * 2]
+```
+or 
+```
+[4, 6, 8]
+```
+
+You could also wrap exceptions, and translate them to the form `{:error, acc}`, or change nils to blank strings or empty arrays. 
+
+Contributions are welcome. Just send a pull request (you must have tests). 
+
