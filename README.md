@@ -17,4 +17,4 @@ The return value of each function is used as the first argument of the next func
 
 ## Trouble in the Kitchen
 
-Sometimes, you need to compose functions with a different strategy. Say your functions use Erlang-style APIs. You might have functions that return """{:ok, value}""" or {:error, value}. 
+Sometimes, you need to compose functions with a different strategy. Say your functions use Erlang-style APIs. You might have functions that return `{:ok, value}` or `{:error, value}`. 
