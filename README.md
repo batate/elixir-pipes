@@ -90,7 +90,7 @@ You could also write tests for testing a value, such as whether a value is even,
 
 ### pipe_with
 
-Sometimes, you want to write the composition rules yourself. You can do this with `pipe_with function, pipe` where function has a sig of f(pipe_segment, x). The macro will pass a function that wraps each pipe segment to your function. You can also pass it some argument, which is usually a transformation of a function. 
+Sometimes, you want to write the composition rules yourself. You can do this with `pipe_with function, pipe` where function has a sig of `f(x, pipe_segment)` where `pipe_segment` is a function in the pipe. The macro will pass the accumulated value and a function that wraps each pipe segment to your function. 
 
 Say you have a list, and you want to do arithmetic on each element of the list. You can do so with `pipe_with` like this:
 
@@ -98,7 +98,7 @@ Say you have a list, and you want to do arithmetic on each element of the list. 
   def inc(x), do: x + 1
   def double(x), do: x * 2
 
-  pipe_with fn(f, acc) -> Enum.map(acc, f) end,
+  pipe_with fn(acc, f) -> Enum.map(acc, f) end,
         [ 1, 2, 3] |> inc |> double
 
 ```

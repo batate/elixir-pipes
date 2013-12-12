@@ -53,7 +53,7 @@ defmodule Pipe do
     Enum.reduce Macro.unpipe(pipes), &(reduce_with &1, &2, fun)
   end
 
-  defp reduce_with( segment, acc, fun ) do
+  defp reduce_with( segment, acc, outer ) do
     left_side = quote do: acc
     x = quote do: x
     quote do
@@ -61,13 +61,9 @@ defmodule Pipe do
         unquote Macro.pipe(x, segment)
       end
 
-      unquote(fun).(inner, unquote(acc))
+      unquote(outer).(unquote(acc), inner)
     end
   end
   
-  
-  defp pipe_with([], acc, _fun, _var) do
-    acc
-  end
   
 end
