@@ -54,7 +54,6 @@ defmodule Pipe do
   end
 
   defp reduce_with( segment, acc, outer ) do
-    left_side = quote do: acc
     x = quote do: x
     quote do
       inner = fn(x) ->
