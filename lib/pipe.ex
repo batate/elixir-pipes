@@ -37,7 +37,7 @@ defmodule Pipe do
     quote do
       ac = unquote acc
       case unquote(test).(ac) do
-        true -> unquote(Macro.pipe(left_side, x))
+        true -> unquote(Macro.pipe((quote do: ac), x))
         false -> ac
       end
     end
