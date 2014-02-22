@@ -12,12 +12,14 @@ defmodule Matrix do
   # matrix = [[1, 2], [2, 3], [0, 1]]
   # pipe_with &Matrix.merge_lists/2, matrix |> Kernel.+(1) |> Kernel.*(2)  
   # -> [[4, 6], [6, 8], [2, 4]]
-  def merge_list(f, x), do: Enum.map(x, f)
-  def merge_lists(f, x), do: Enum.map(x, &merge_list(f, &1))
+  def merge_list(x, f), do: Enum.map(x, f)
+  def merge_lists(x, f), do: Enum.map(x, &Matrix.merge_list(&1, f))
 
 end
 
 use Pipe
-IO.inspect( 
-pipe_with &Matrix.merge_lists/2, 
-  [[1, 2], [2, 3]] |> Kernel.*(2) |> Kernel.+(1) )
+matrix = [[1, 2], [2, 3], [0, 1]]
+IO.inspect pipe_with &Matrix.merge_lists/2, 
+           matrix |> 
+           Kernel.+(1) |> 
+           Kernel.*(2)

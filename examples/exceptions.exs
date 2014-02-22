@@ -7,7 +7,7 @@ defmodule ExceptionWrapper do
   a more uniform API. 
   """
   
-  def wrap({:error, e, acc}, f), do: {:error, e, acc}
+  def wrap({:error, e, acc}, _), do: {:error, e, acc}
   def wrap(acc, f) do
     f.(acc)
   rescue
@@ -22,7 +22,7 @@ defmodule Roulette do
     IO.puts "oh yayz iz a liv #{inspect acc}"
   end
   
-  def bang(acc) do
+  def bang(_acc) do
     IO.puts "oh noz iz ded"
     raise "shotz"
   end
