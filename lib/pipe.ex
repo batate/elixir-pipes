@@ -32,8 +32,6 @@ defmodule Pipe do
   end
   
   defp reduce_if( x, acc, test ) do
-    left_side = quote do: ac
-    
     quote do
       ac = unquote acc
       case unquote(test).(ac) do
