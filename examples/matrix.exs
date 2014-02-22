@@ -18,8 +18,15 @@ defmodule Matrix do
 end
 
 use Pipe
+list = [1, 2, 3]
+IO.inspect pipe_with &Matrix.merge_list/2, 
+           list |> 
+           Kernel.+(1) |> 
+           Kernel.*(2)
+
 matrix = [[1, 2], [2, 3], [0, 1]]
 IO.inspect pipe_with &Matrix.merge_lists/2, 
            matrix |> 
            Kernel.+(1) |> 
            Kernel.*(2)
+
