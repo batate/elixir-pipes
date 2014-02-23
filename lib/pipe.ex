@@ -52,10 +52,9 @@ defmodule Pipe do
   end
 
   defp reduce_with( segment, acc, outer ) do
-    x = quote do: x
     quote do
       inner = fn(x) ->
-        unquote Macro.pipe(x, segment)
+        unquote Macro.pipe((quote do: x), segment)
       end
 
       unquote(outer).(unquote(acc), inner)
