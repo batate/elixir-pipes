@@ -11,12 +11,12 @@ defmodule PipesTest do
     def pipes, do: 1 |> inc |> double
     def with_pipes_identity do
       pipe_with fn(acc, f) -> f.(acc) end,      
-        ([ 1, 2, 3] |> Enum.map( &( &1 - 2 ) ) |> Enum.map( &( &1 * 2 ) ))
+        [ 1, 2, 3] |> Enum.map( &( &1 - 2 ) ) |> Enum.map( &( &1 * 2 ) )
     end
     
     def with_pipes_map do
       pipe_with fn(acc, f) -> Enum.map(acc, f) end,
-        ([ 1, 2, 3] |> inc |> double)
+        [ 1, 2, 3] |> inc |> double
     end
     
   end
