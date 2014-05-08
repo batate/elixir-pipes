@@ -11,12 +11,12 @@ defmodule PipesTest do
     def pipes, do: 1 |> inc |> double
     def with_pipes_identity do
       pipe_with fn(acc, f) -> f.(acc) end,      
-        [ 1, 2, 3] |> Enum.map( &( &1 - 2 ) ) |> Enum.map( &( &1 * 2 ) )
+        ([ 1, 2, 3] |> Enum.map( &( &1 - 2 ) ) |> Enum.map( &( &1 * 2 ) ))
     end
     
     def with_pipes_map do
       pipe_with fn(acc, f) -> Enum.map(acc, f) end,
-        [ 1, 2, 3] |> inc |> double
+        ([ 1, 2, 3] |> inc |> double)
     end
     
   end
@@ -37,6 +37,7 @@ defmodule PipesTest do
   end
   
   should "compose with map function" do
+    IO.puts "compose with map: #{inspect Simple.with_pipes_map}"
     assert [4, 6, 8] == Simple.with_pipes_map
   end
   
@@ -51,5 +52,4 @@ defmodule PipesTest do
   should "pipe if" do
     assert  {:ok, 4} == Matching.if_pipes
   end
-  
 end
