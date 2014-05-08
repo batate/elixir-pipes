@@ -37,7 +37,6 @@ defmodule PipesTest do
   end
   
   should "compose with map function" do
-    IO.puts "compose with map: #{inspect Simple.with_pipes_map}"
     assert [4, 6, 8] == Simple.with_pipes_map
   end
   
