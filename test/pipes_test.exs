@@ -51,5 +51,4 @@ defmodule PipesTest do
   should "pipe if" do
     assert  {:ok, 4} == Matching.if_pipes
   end
-  
 end
