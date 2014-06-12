@@ -4,13 +4,13 @@ defmodule Pipes.Mixfile do
   def project do
     [ app: :pipe,
       version: "0.0.1",
-      elixir: "~> 0.13.0",
+      elixir: "~> 0.13",
       deps: deps ]
   end
 
   # Configuration for the OTP application
   def application do
-    [mod: { Pipes, [] }]
+    []
   end
 
   # Returns the list of dependencies in the format:
