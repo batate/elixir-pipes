@@ -4,7 +4,7 @@ defmodule Pipes.Mixfile do
   def project do
     [ app: :pipe,
       version: "0.0.1",
-      elixir: "~> 0.13",
+      elixir: "~> 1.0",
       deps: deps,
       package: package,
       description: description ]
