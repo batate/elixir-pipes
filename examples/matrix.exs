@@ -6,7 +6,7 @@ defmodule Matrix do
   
   matrix + 1 should add 1 to all cells of the matrix
   
-  mix run lib/examples/matrix.exs
+  mix run examples/matrix.exs
   """
   # usage: 
   # matrix = [[1, 2], [2, 3], [0, 1]]
