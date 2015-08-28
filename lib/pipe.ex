@@ -26,8 +26,11 @@ defmodule Pipe do
     do_pipe_matching(expr, test, pipes)
   end
 
+  defp unpipe([do: pipes]), do: Macro.unpipe(pipes)
+  defp unpipe(pipes), do: Macro.unpipe(pipes)
+
   defp do_pipe_matching(expr, test, pipes) do
-    [{h,_}|t] = Macro.unpipe(pipes)
+    [{h,_}|t] = unpipe(pipes)
     Enum.reduce t, h, &(reduce_matching &1, &2, expr, test)
   end
 
@@ -44,7 +47,7 @@ defmodule Pipe do
   #     json_doc |> transform |> transform
 
   defmacro pipe_while(test, pipes) do
-    [{h,_}|t] = Macro.unpipe(pipes)
+    [{h,_}|t] = unpipe(pipes)
     Enum.reduce t, h, &(reduce_if &1, &2, test)
   end
 
@@ -64,7 +67,7 @@ defmodule Pipe do
   #   [ 1, 2, 3] |> &(&1 + 1) |> &(&1 * 2)
 
   defmacro pipe_with(fun, pipes) do
-    [{h,_}|t] = Macro.unpipe(pipes)
+    [{h,_}|t] = unpipe(pipes)
     Enum.reduce t, h, &(reduce_with &1, &2, fun)
   end
 
