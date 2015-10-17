@@ -46,32 +46,52 @@ This function will compose as long as the computed value matches the value so fa
 
 ```elixir
 defmodule RussianRoulette do
-  def click(acc) do
-    IO.puts "click..."
+  use Pipe
+
+  def click(params) do
+    IO.puts "params: #{inspect params} | click..."
     {:ok, "click"}
   end
 
-  def bang(acc) do
-    IO.puts "BANG."
+  def bang(params) do
+    IO.puts "params: #{inspect params} | BANG."
     {:error, "bang"}
   end
+
+  def roll do
+    pipe_matching {:ok, _},
+      {:ok, ""} |> click |> click |> bang |> click
+  end
+
+  def rhs_roll do
+    pipe_matching x, {:ok, x},
+      {:ok, ""} |> click |> click |> bang |> click
+  end
+
 end
-
-pipe_matching {:ok, _},  
-{:ok, ""} |> click |> click |> bang |> click
-
 ```
 
 ...would produce...
 
-```
-click...
-click...
-BANG.
+```elixir
+iex(1)> RussianRoulette.roll
+params: {:ok, ""} | click...
+params: {:ok, "click"} | click...
+params: {:ok, "click"} | BANG.
+{:error, "bang"}
 ```
 
-It would evaluate functions as long as the accumulator matched the expression. In this case, we process statements as long as the composition yields an `:ok` on the left hand side. 
+It would evaluate functions as long as the accumulator matched the expression. In this case, we process statements as long as the composition yields an `:ok` on the left hand side.
 
+If we want to pass just the right hand side down the pipeline, we can use pipe_matching/3:
+
+```elixir
+iex(1)> RussianRoulette.rhs_roll
+params: "" | click...
+params: "click" | click...
+params: "click" | BANG.
+{:error, "bang"}
+```
 
 ### pipe_while
 
