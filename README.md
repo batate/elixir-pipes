@@ -100,8 +100,6 @@ Sometimes, you may want to test on something other than a match. This compositio
 ```elixir
     def while_test({:ok, _}), do: true
     def while_test(_), do: false
-    def inc({code, x}), do: {code, x + 1}
-    def double({code, x}), do: {code, x * 2}
 
     pipe_while(&while_test/1, {:ok, ""} |> click |> click |> bang |> click )
 ```
