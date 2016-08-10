@@ -19,11 +19,11 @@ The return value of each function is used as the first argument of the next func
 
 Sometimes, you need to compose functions with a different strategy. Say your functions use Erlang-style APIs. You might have functions that return `{:ok, value}` or `{:error, value}`. Then, the pipe operator might make things difficult. After you receive an `error` code, you probably want the pipe to stop. 
 
-Elixir-Pipes allows you to specify a strategy, in one concise space, that you can then apply to all segments in an Elixir pipe. This capibility will help you compose many different types of functions. How many times have you wanted to:
+Elixir-Pipes allows you to specify a strategy, in one concise space, that you can then apply to all segments in an Elixir pipe. This capability will help you compose many different types of functions. How many times have you wanted to:
 
 - compose a pipe that uses some variation of a function call like  `[1, 2, 3] |> add(1) |> times(2)` ?
 - halt the execution of a pipe on error?
-- tease nils to empty strings, without changing your original funcions?
+- tease nils to empty strings, without changing your original functions?
 - transform exceptions to Erlang-style `{:error, x}` tuples?
 
 The recipes are all there waiting for you. 
