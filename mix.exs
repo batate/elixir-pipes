@@ -5,9 +5,9 @@ defmodule Pipes.Mixfile do
     [ app: :pipe,
       version: "0.0.2",
       elixir: "~> 1.0",
-      deps: deps,
-      package: package,
-      description: description ]
+      deps: deps(),
+      package: package(),
+      description: description() ]
   end
 
   # Configuration for the OTP application
