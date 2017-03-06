@@ -74,20 +74,4 @@ defmodule Pipe do
       unquote(outer).(unquote(acc), fn(x) -> unquote(pipe) end)
     end
   end
-
-  # pipe with error-monad logic
-  defmacro pipe_error_m(pipes) do
-    [{h,_}|t] = Macro.unpipe(pipes)
-    Enum.reduce t, h, &(reduce_matching &1, &2)
-  end
-
-  defp reduce_matching({x, pos}, acc) do
-    quote do
-      case unquote(acc) do
-        {:ok, val} -> unquote(Macro.pipe((quote do: val), x, pos))
-        {:error, reason} -> {:error, reason}
-        val -> unquote(Macro.pipe((quote do: val), x, pos))
-      end
-    end
-  end
 end
