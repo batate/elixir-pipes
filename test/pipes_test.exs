@@ -33,17 +33,6 @@ defmodule PipesTest do
     def pipes_expr, do: pipe_matching(x, {:ok, x}, {:ok, 1} |> ok_inc |> ok_double )
   end
 
-  defmodule ErrorM do
-    use Pipe
-    def inc(x), do: {:ok, x + 1}
-    def double(x), do: {:ok, x * 2}
-    def ok_inc(x), do: {:ok, x + 1}
-    def ok_double(x), do: {:ok, x * 2}
-    def pipes_error_m, do: pipe_error_m( 1 |> inc |> double )
-    def pipes_error_m_ok, do: pipe_error_m( 1 |> ok_inc |> ok_double )
-    def pipes_error_m_comb, do: pipe_error_m( 1 |> inc |> ok_inc |> double |> ok_double)
-  end
-
 
   should "compose with identity function" do
     assert [-2, 0, 2] == Simple.with_pipes_identity
@@ -64,11 +53,5 @@ defmodule PipesTest do
 
   should "pipe if" do
     assert  {:ok, 4} == Matching.if_pipes
-  end
-
-  should "pipe error_m" do
-    assert  {:ok, 4} == ErrorM.pipes_error_m
-    assert  {:ok, 4} == ErrorM.pipes_error_m_ok
-    assert  {:ok, 12} == ErrorM.pipes_error_m_comb
   end
 end
