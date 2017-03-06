@@ -29,6 +29,11 @@ defmodule PipesTest do
     def ok_inc(x), do: {:ok, x + 1}
     def ok_double(x), do: {:ok, x * 2}
     def pipes, do: pipe_matching({:ok, _}, {:ok, 1} |> inc |> double )
+    def do_pipes do
+      pipe_matching {:ok, _} do
+        {:ok, 1} |> inc |> double
+      end
+    end
     def if_pipes, do: pipe_while(&if_test/1, {:ok, 1} |> inc |> double )
     def pipes_expr, do: pipe_matching(x, {:ok, x}, {:ok, 1} |> ok_inc |> ok_double )
   end
@@ -60,6 +65,10 @@ defmodule PipesTest do
   should "pipe matching" do
     assert  {:ok, 4} == Matching.pipes
     assert  {:ok, 4} == Matching.pipes_expr
+  end
+
+  should "pipe do" do
+    assert  {:ok, 4} == Matching.do_pipes
   end
 
   should "pipe if" do
