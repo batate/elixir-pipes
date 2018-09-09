@@ -125,7 +125,7 @@ Say you have a list, and you want to do arithmetic on each element of the list. 
 This returns 
 
 ```
-[(1 + 1) * 2, (2 + 1) * 2, (2 + 2) * 2]
+[(1 + 1) * 2, (2 + 1) * 2, (3 + 1) * 2]
 ```
 or 
 ```
